@@ -1,0 +1,15 @@
+sample_annotation: /nobackup/lab_bock/projects/bmdm-stim/results/metadata/genome_tracks_annotation.csv
+genome_bed: /nobackup/lab_bock/projects/bmdm-stim/resources/mm10_UCSC_genome.bed.gz
+gene_list: /research/home/sreichl/projects/bmdm-stim/metadata/genome_tracks_genes.txt
+results_dir: /nobackup/lab_bock/projects/bmdm-stim/results/INT/genome_tracks
+
+# for bigwig generation using bamCoverage
+genome_size: 2407883318
+
+# hg38: 2747877777
+# mm10: 2407883318
+
+# cluster parameters
+partition: 'tinyq'
+memory: '4G'
+threads: 1

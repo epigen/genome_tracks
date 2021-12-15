@@ -1,0 +1,174 @@
+# libraries
+import pandas as pd
+import os
+import gzip
+
+##### utility functions #####
+def get_bams(wildcards):
+    return annot.loc[annot['group']==wildcards.group,'bam'].to_list()
+
+def get_bigwigs(wildcards):
+    return expand(os.path.join(config["results_dir"],'bigwigs','{group}.bigWig'),group=sorted(annot.loc[annot['category']==wildcards.category,'group'].unique()))
+
+def parse_gene(gene):
+    count = 0
+    
+    with gzip.open(config['genome_bed'], 'rt') as f:
+        for line in f:
+            parsed_line = line.split()
+            if parsed_line[3] == gene:
+                count = count+1
+                if count==1:
+                    chrom, start, end = parsed_line[:3]
+                else:
+                    tmp_chrom, tmp_start, tmp_end = parsed_line[:3]
+                    if int(start)<int(tmp_start):
+                        start = tmp_start
+                    if int(end)>int(tmp_end):
+                        end = tmp_end
+        if count==0:
+            return -1
+    return chrom, int(start)-base_buffer, int(end)+base_buffer, count
+
+
+##### set & load config and sample annotation sheets #####
+configfile: os.path.join("config","config.yaml")
+
+annot = pd.read_csv(config['sample_annotation'])
+genes = pd.read_csv(config['gene_list'], names=['genes']).genes.to_list()
+genome_size=config['genome_size']
+
+# cluster parameters
+partition=config['partition']
+mem=config['memory']
+threads=config['threads']
+
+# gtracks parameters
+ymax = 200
+xaxis='bottom'
+base_buffer = 2000
+
+
+############### FOR TESTING only 10 samples ##################
+# annot = annot.iloc[-10:,]
+# genes = genes[:2]
+
+
+# find gtrack parameters for each gene and handle exception when gene is not found
+gene_annot_list = []
+remove_genes = []
+for gene in genes:
+    tmp_val = parse_gene(gene)
+    if tmp_val==-1:
+        # drop gene, because not found
+        remove_genes.append(gene)
+    else:
+        gene_annot_list.append(tmp_val)
+        
+if len(remove_genes)>0:
+    pd.DataFrame(remove_genes).to_csv(os.path.join(config["results_dir"],'genes_not_found.csv'), index=False, header=False)
+    genes = [gene for gene in genes if gene not in remove_genes]
+  
+gene_annot_df = pd.DataFrame(gene_annot_list, columns=['chr', 'start', 'end', 'count'], index=genes)
+
+##### target rules #####
+
+rule all:
+    input:
+        genome_tracks=expand(os.path.join(config["results_dir"],'tracks', '{category}_{gene}.svg'),category=annot['category'].unique(), gene=genes),
+    params:
+        # cluster parameters
+        partition=partition,
+    threads: threads
+    resources:
+        mem=mem,
+    log:
+        os.path.join("logs","rules","all.log")
+        
+        
+rule merge_bams:
+    input:
+        get_bams,
+    output:
+        merged_bam = os.path.join(config["results_dir"],'merged_bams','{group}.bam'),
+    params:
+#         bams= lambda w: annot.loc[annot['group']=="{}".format(w.group),'bam'].to_list(),
+        # cluster parameters
+        partition=partition,
+    threads: threads
+    resources:
+        mem=mem,
+    conda:
+        "./envs/pygenometracks.yaml",
+    log:
+        "logs/rules/merge_bams_{group}.log"
+    shell:
+        """
+        samtools merge {output.merged_bam} {input}
+        
+        samtools index -b {output.merged_bam}
+        """
+    
+    
+rule make_bigwigs:
+    input:
+        merged_bam = os.path.join(config["results_dir"],'merged_bams','{group}.bam'),
+    output:
+        bigwig = os.path.join(config["results_dir"],'bigwigs','{group}.bigWig'),
+    params:
+        # bamCoverage parameters
+        extendReads =  lambda w: "--extendReads 175" if "ATAC" in "{}".format(w.group) else " ",
+        genome_size = genome_size,
+        # cluster parameters
+        partition=partition,
+    threads: threads
+    resources:
+        mem=mem,
+    conda:
+        "./envs/pygenometracks.yaml",
+    log:
+        "logs/rules/make_bigwigs_{group}.log"
+    shell:
+        """
+        bamCoverage --bam {input.merged_bam} \
+            -p max --binSize 10  --normalizeUsing RPGC \
+            --effectiveGenomeSize {params.genome_size} {params.extendReads} \
+            -o "{output.bigwig}" > "{output.bigwig}.log" 2>&1;
+        """
+
+rule plot_tracks:
+    input:
+        get_bigwigs,
+    output:
+        genome_track = report(os.path.join(config["results_dir"],'tracks','{category}_{gene}.svg'), caption="report/genome_tracks.rst", category="genome tracks"),
+    params:
+        # gtracks parameters
+        gene = lambda w: "{}".format(w.gene),
+        genome_bed = config['genome_bed'],
+        ymax = ymax,
+        xaxis = xaxis,
+        coordinates = lambda w: "{}:{}-{}".format(gene_annot_df.loc[w.gene,'chr'], gene_annot_df.loc[w.gene,'start'], gene_annot_df.loc[w.gene,'end']),
+        # eg chr14:103052047-103053094
+        gene_rows = lambda w: "{}".format(gene_annot_df.loc[w.gene,'count']),
+        # cluster parameters
+        partition=partition,
+    threads: threads
+    resources:
+        mem=mem,
+    conda:
+        "./envs/pygenometracks.yaml",
+    log:
+        "logs/rules/plot_tracks_{category}_{gene}.log"
+    shell:
+        """
+        export GTRACKS_GENES_PATH={params.genome_bed}
+        
+        gtracks {params.coordinates} \
+            {input} \
+            {output.genome_track} \
+            --genes {params.genome_bed} \
+            --max {params.ymax} \
+            --gene-rows {params.gene_rows} \
+            --genes-height {params.gene_rows} \
+            --x-axis {params.xaxis}
+        """

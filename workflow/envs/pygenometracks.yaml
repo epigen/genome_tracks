@@ -1,0 +1,13 @@
+name: pygenometracks
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - samtools
+  - deeptools
+  - pygenometracks=3.6
+  - python=3.7
+  - pip
+  - pip:
+    - gtracks
