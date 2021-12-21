@@ -5,9 +5,17 @@ results_dir: /nobackup/lab_bock/projects/bmdm-stim/results/INT/genome_tracks
 
 # for bigwig generation using bamCoverage
 genome_size: 2407883318
-
 # hg38: 2747877777
 # mm10: 2407883318
+
+### gtracks parameters
+# y axis scale if '' it uses auto-scale for each track
+y_max: '' 
+# position of x-axis
+x_axis: 'bottom'
+
+# how many bases up- & downstream more to plot (eg to see accessible promoters)
+base_buffer: 2000
 
 # cluster parameters
 partition: 'tinyq'

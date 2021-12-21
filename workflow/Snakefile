@@ -22,9 +22,9 @@ def parse_gene(gene):
                     chrom, start, end = parsed_line[:3]
                 else:
                     tmp_chrom, tmp_start, tmp_end = parsed_line[:3]
-                    if int(start)<int(tmp_start):
+                    if int(tmp_start)<int(start):
                         start = tmp_start
-                    if int(end)>int(tmp_end):
+                    if int(tmp_end)>int(end):
                         end = tmp_end
         if count==0:
             return -1
@@ -44,9 +44,9 @@ mem=config['memory']
 threads=config['threads']
 
 # gtracks parameters
-ymax = 200
-xaxis='bottom'
-base_buffer = 2000
+ymax = config['y_max']
+xaxis = config['x_axis']
+base_buffer = config['base_buffer']
 
 
 ############### FOR TESTING only 10 samples ##################
@@ -145,7 +145,7 @@ rule plot_tracks:
         # gtracks parameters
         gene = lambda w: "{}".format(w.gene),
         genome_bed = config['genome_bed'],
-        ymax = ymax,
+        ymax = lambda w: "--max {}".format(ymax) if ymax!='' else " ",
         xaxis = xaxis,
         coordinates = lambda w: "{}:{}-{}".format(gene_annot_df.loc[w.gene,'chr'], gene_annot_df.loc[w.gene,'start'], gene_annot_df.loc[w.gene,'end']),
         # eg chr14:103052047-103053094
@@ -166,8 +166,7 @@ rule plot_tracks:
         gtracks {params.coordinates} \
             {input} \
             {output.genome_track} \
-            --genes {params.genome_bed} \
-            --max {params.ymax} \
+            --genes {params.genome_bed} {params.ymax} \
             --gene-rows {params.gene_rows} \
             --genes-height {params.gene_rows} \
             --x-axis {params.xaxis}
