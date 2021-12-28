@@ -2,6 +2,8 @@
 import pandas as pd
 import os
 import gzip
+import re # for regular expressions
+import numpy as np
 
 ##### utility functions #####
 def get_bams(wildcards):
@@ -30,6 +32,10 @@ def parse_gene(gene):
             return -1
     return chrom, int(start)-base_buffer, int(end)+base_buffer, count
 
+def parse_region(region):
+    chrom, start, end = region.replace('-', ':').split(':')
+    return chrom, int(start), int(end), 1
+
 
 ##### set & load config and sample annotation sheets #####
 configfile: os.path.join("config","config.yaml")
@@ -47,28 +53,34 @@ threads=config['threads']
 ymax = config['y_max']
 xaxis = config['x_axis']
 base_buffer = config['base_buffer']
+width = config['width']
 
 
 ############### FOR TESTING only 10 samples ##################
 # annot = annot.iloc[-10:,]
 # genes = genes[:2]
 
+COORD_REGEX = re.compile('chr[0-9XY]+:[0-9]+-[0-9]+$')
 
 # find gtrack parameters for each gene and handle exception when gene is not found
 gene_annot_list = []
 remove_genes = []
 for gene in genes:
-    tmp_val = parse_gene(gene)
-    if tmp_val==-1:
-        # drop gene, because not found
-        remove_genes.append(gene)
+    if COORD_REGEX.match(gene):
+        gene_annot_list.append(parse_region(gene))
     else:
-        gene_annot_list.append(tmp_val)
+        tmp_val = parse_gene(gene)
+        if tmp_val==-1:
+            # drop gene, because not found
+            remove_genes.append(gene)
+        else:
+            gene_annot_list.append(tmp_val)
         
 if len(remove_genes)>0:
     pd.DataFrame(remove_genes).to_csv(os.path.join(config["results_dir"],'genes_not_found.csv'), index=False, header=False)
     genes = [gene for gene in genes if gene not in remove_genes]
-  
+
+genes = [gene.replace(':', '-') for gene in genes]
 gene_annot_df = pd.DataFrame(gene_annot_list, columns=['chr', 'start', 'end', 'count'], index=genes)
 
 ##### target rules #####
@@ -149,7 +161,8 @@ rule plot_tracks:
         xaxis = xaxis,
         coordinates = lambda w: "{}:{}-{}".format(gene_annot_df.loc[w.gene,'chr'], gene_annot_df.loc[w.gene,'start'], gene_annot_df.loc[w.gene,'end']),
         # eg chr14:103052047-103053094
-        gene_rows = lambda w: "{}".format(gene_annot_df.loc[w.gene,'count']),
+        gene_rows = lambda w: "{}".format(gene_annot_df.loc[w.gene,'count'].astype(np.int64)),
+        width = "{}".format(width),
         # cluster parameters
         partition=partition,
     threads: threads
@@ -169,5 +182,6 @@ rule plot_tracks:
             --genes {params.genome_bed} {params.ymax} \
             --gene-rows {params.gene_rows} \
             --genes-height {params.gene_rows} \
-            --x-axis {params.xaxis}
+            --x-axis {params.xaxis} \
+            --width {params.width}
         """

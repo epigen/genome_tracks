@@ -1,6 +1,8 @@
-sample_annotation: /nobackup/lab_bock/projects/bmdm-stim/results/metadata/genome_tracks_annotation.csv
+# sample_annotation: /nobackup/lab_bock/projects/bmdm-stim/results/metadata/genome_tracks_annotation.csv
+sample_annotation: /nobackup/lab_bock/projects/bmdm-stim/results/metadata/genome_tracks_annotation_new.csv
 genome_bed: /nobackup/lab_bock/projects/bmdm-stim/resources/mm10_UCSC_genome.bed.gz
-gene_list: /research/home/sreichl/projects/bmdm-stim/metadata/genome_tracks_genes.txt
+# gene_list: /research/home/sreichl/projects/bmdm-stim/metadata/genome_tracks_genes.txt
+gene_list: /research/home/sreichl/projects/bmdm-stim/metadata/genome_tracks_genes_reduced.txt
 results_dir: /nobackup/lab_bock/projects/bmdm-stim/results/INT/genome_tracks
 
 # for bigwig generation using bamCoverage
@@ -10,9 +12,11 @@ genome_size: 2407883318
 
 ### gtracks parameters
 # y axis scale if '' it uses auto-scale for each track
-y_max: '' 
+y_max: 100
 # position of x-axis
 x_axis: 'bottom'
+#  width of plot in cm (default: 40)
+width: 20
 
 # how many bases up- & downstream more to plot (eg to see accessible promoters)
 base_buffer: 2000
