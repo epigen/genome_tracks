@@ -10,7 +10,10 @@ def get_bams(wildcards):
     return annot.loc[annot['group']==wildcards.group,'bam'].to_list()
 
 def get_bigwigs(wildcards):
-    return expand(os.path.join(config["results_dir"],'bigwigs','{group}.bigWig'),group=sorted(annot.loc[annot['category']==wildcards.category,'group'].unique()))
+    if wildcards.category=='ALL':
+        return expand(os.path.join(config["results_dir"],'bigwigs','{group}.bw'),group=sorted(annot['group'].unique()))
+    else:
+        return expand(os.path.join(config["results_dir"],'bigwigs','{group}.bw'),group=sorted(annot.loc[annot['category']==wildcards.category,'group'].unique()))
 
 def parse_gene(gene):
     count = 0
@@ -87,7 +90,8 @@ gene_annot_df = pd.DataFrame(gene_annot_list, columns=['chr', 'start', 'end', 'c
 
 rule all:
     input:
-        genome_tracks=expand(os.path.join(config["results_dir"],'tracks', '{category}_{gene}.svg'),category=annot['category'].unique(), gene=genes),
+        genome_tracks=expand(os.path.join(config["results_dir"],'tracks', '{category}_{gene}.svg'), category=annot['category'].unique(), gene=genes),
+        genome_tracks_all=expand(os.path.join(config["results_dir"],'tracks', 'ALL_{gene}.svg'), gene=genes),
     params:
         # cluster parameters
         partition=partition,
@@ -126,7 +130,7 @@ rule make_bigwigs:
     input:
         merged_bam = os.path.join(config["results_dir"],'merged_bams','{group}.bam'),
     output:
-        bigwig = os.path.join(config["results_dir"],'bigwigs','{group}.bigWig'),
+        bigwig = os.path.join(config["results_dir"],'bigwigs','{group}.bw'),
     params:
         # bamCoverage parameters
         extendReads =  lambda w: "--extendReads 175" if "ATAC" in "{}".format(w.group) else " ",
@@ -145,7 +149,7 @@ rule make_bigwigs:
         bamCoverage --bam {input.merged_bam} \
             -p max --binSize 10  --normalizeUsing RPGC \
             --effectiveGenomeSize {params.genome_size} {params.extendReads} \
-            -o "{output.bigwig}" > "{output.bigwig}.log" 2>&1;
+            -o "{output.bw}" > "{output.bw}.log" 2>&1;
         """
 
 rule plot_tracks:
@@ -185,3 +189,4 @@ rule plot_tracks:
             --x-axis {params.xaxis} \
             --width {params.width}
         """
+        
