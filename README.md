@@ -25,11 +25,12 @@ From aligned BAM files to genome browser tracks.
 
 # Executed Steps
 1. merge and index BAM files with samtools by group (samtools)
-2. generate bigwigs per merged bam file (bamCoverage)
-4. get information per gene from BED file
+2. generate a bigwig file for each merged bam file (deepTools bamCoverage)
+4. get information per gene from 12-column BED file:
     - coordinates from BED file & extend left & right by parameter base_buffer
     - number of isoforms ie number of lines in the BED file (only for genes, for regions it is hardcoded to 1)
-3. make one plot per category of bigwigs and gene with the before determined gene-parameters (gene-rows, gene-heights, coordinates)
+3. make one plot per category of bigwigs and gene/region with the before determined gene-parameters (gene-rows, gene-heights, coordinates)
+4. make one plot including ALL categories per gene/region
 
 # Parameters (for project config file)
 - genome size
