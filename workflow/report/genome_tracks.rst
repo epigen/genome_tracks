@@ -1,1 +1,1 @@
-Genome Browser tracks of the genomic region around {{snakemake.wildcards["gene"]}} in category {{snakemake.wildcards["category"]}}
+Genome Browser tracks of the genomic region around {{snakemake.wildcards["gene"]}} in category {{snakemake.wildcards["category"]}}.
