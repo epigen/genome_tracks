@@ -1,7 +1,7 @@
 # Genome Browser Track Visualization Snakemake Workflow Powered by pyGenomeTracks for Aligned BAM Files
 A [Snakemake](https://snakemake.readthedocs.io/en/stable/) workflow for easy visualization of genome browser tracks of aligned BAM files (e.g., RNA-seq, ATAC-seq,...) powered by the wrapper [gtracks](https://gitlab.com/salk-tm/gtracks) for the package [pyGenomeTracks](https://github.com/deeptools/pyGenomeTracks).
 
-This workflow adheres to the module specifications of [MR. PARETO](https://github.com/epigen/mr.pareto), an effort to augment research by modularizing (biomedical) data science.
+This workflow adheres to the module specifications of [MR.PARETO](https://github.com/epigen/mr.pareto), an effort to augment research by modularizing (biomedical) data science. For more details and modules check out the project's repository.
 
 **If you use this workflow in a publication, don't forget to give credits to the authors by citing the URL of this (original) repository (and its DOI, see Zenodo badge above -> coming soon).**
 
