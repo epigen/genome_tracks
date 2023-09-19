@@ -35,4 +35,5 @@ x_axis: 'bottom'
 width: 20
 # how many bases up- & downstream of start/end of a gene more to plot (e.g., to see accessible promoters)
 base_buffer: 2000
-
+# file type of the plot, options are "svg","pdf","png"
+file_type: "pdf"

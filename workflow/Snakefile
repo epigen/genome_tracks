@@ -69,8 +69,8 @@ gene_annot_df = pd.DataFrame(gene_annot_list, columns=['chr', 'start', 'end', 'c
 ##### target rule #####
 rule all:
     input:
-        genome_tracks = expand(os.path.join(config["result_path"], module_name, 'tracks', '{category}_{gene}.svg'), category=annot['category'].unique(), gene=genes),
-        genome_tracks_all = expand(os.path.join(config["result_path"], module_name, 'tracks', 'ALL_{gene}.svg'), gene=genes),
+        genome_tracks = expand(os.path.join(config["result_path"], module_name, 'tracks', '{category}_{gene}.'+config["file_type"]), category=annot['category'].unique(), gene=genes),
+        genome_tracks_all = expand(os.path.join(config["result_path"], module_name, 'tracks', 'ALL_{gene}.'+config["file_type"]), gene=genes),
         envs = expand(os.path.join(config["result_path"],'envs', module_name,'{env}.yaml'),env=['pygenometracks']),
         gene_list = os.path.join(config["result_path"],'configs', module_name,'gene_list.txt'),
         configs = os.path.join(config["result_path"],'configs', module_name,'{}_config.yaml'.format(config["project_name"])),

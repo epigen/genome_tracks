@@ -4,7 +4,7 @@ rule plot_tracks:
     input:
         get_bigwigs,
     output:
-        genome_track = report(os.path.join(config["result_path"], module_name, 'tracks','{category}_{gene}.svg'), 
+        genome_track = report(os.path.join(config["result_path"], module_name, 'tracks','{category}_{gene}.'+config["file_type"]), 
                               caption="../report/genome_tracks.rst", 
                               category="{}_{}".format(config["project_name"], module_name),
                               subcategory="{category}",
