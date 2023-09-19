@@ -55,8 +55,8 @@ The workflow performs the following steps that produce the outlined results:
       - coordinates from the 12-column BED file are extracted and extended at start/end by the parameter base_buffer.
       - the number of isoforms i.e. number of lines in the BED file is determined (__only for genes, for genomic regions it is hardcoded to 1__) to plot below the tracks.
 - Visualization
-  - generate one plot per category of bigWigs and gene/region with the before determined gene-parameters i.e, coordinates and gene-rows (tracks/{category}\_{gene/region}.svg).
-  - generate one plot including __ALL__ categories per gene/region (tracks/ALL\_{gene/region}.svg)
+  - generate one plot per category of bigWigs and gene/region with the before determined gene-parameters i.e, coordinates and gene-rows (tracks/{category}\_{gene/region}.{svg|pdf|png}).
+  - generate one plot including __ALL__ categories per gene/region (tracks/ALL\_{gene/region}.{svg|pdf|png})
 
 
 # Usage
