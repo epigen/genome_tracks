@@ -11,7 +11,7 @@ rule plot_tracks:
                               labels={
                                   "data": "{gene}",
                                   "type": "genome track",
-                                  "misc": "ymax {}".format(ymax),
+                                  "misc": "ymax {}".format(lambda w: gene_annot_df.loc["{}".format(w.gene),"ymax"]),
                               }),
     resources:
         mem_mb=config.get("mem", "4000"),
@@ -24,7 +24,7 @@ rule plot_tracks:
         # gtracks parameters
         gene = lambda w: "{}".format(w.gene),
         genome_bed = config['genome_bed'],
-        ymax = lambda w: "--max {}".format(ymax) if ymax!='' else " ",
+        ymax = lambda w: "--max {}".format(gene_annot_df.loc["{}".format(w.gene), "ymax"]) if gene_annot_df.loc["{}".format(w.gene),"ymax"] is not None else " ",
         xaxis = xaxis,
         coordinates = lambda w: "{}:{}-{}".format(gene_annot_df.loc[w.gene,'chr'], gene_annot_df.loc[w.gene,'start'], gene_annot_df.loc[w.gene,'end']),
         # eg chr14:103052047-103053094

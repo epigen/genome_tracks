@@ -9,9 +9,6 @@ from snakemake.utils import min_version
 
 min_version("7.15.2")
 
-SDIR = os.path.realpath(os.path.dirname(srcdir("Snakefile")))
-shell.prefix(f"set -eo pipefail;")
-
 module_name = "genome_tracks"
 
 ##### setup report #####
@@ -19,13 +16,14 @@ report: os.path.join("report", "workflow.rst")
 
 ##### set & load config and sample annotation sheets #####
 configfile: os.path.join("config","config.yaml")
-
 annot = pd.read_csv(config['sample_annotation'])
-genes = pd.read_csv(config['gene_list'], names=['genes']).genes.to_list()
+gene_dict = pd.read_csv(config['gene_list'], index_col="gene_region").to_dict('index')
+genes = list(gene_dict.keys())
+
 genome_size=config['genome_size']
 
 # gtracks parameters
-ymax = config['y_max']
+# ymax = config['y_max']
 xaxis = config['x_axis']
 base_buffer = config['base_buffer']
 width = config['width']
@@ -64,7 +62,9 @@ if len(remove_genes)>0:
     genes = [gene for gene in genes if gene not in remove_genes]
 
 genes = [gene.replace(':', '-') for gene in genes]
-gene_annot_df = pd.DataFrame(gene_annot_list, columns=['chr', 'start', 'end', 'count'], index=genes)
+gene_annot_df = pd.DataFrame(gene_annot_list, columns=['chr', 'start', 'end', 'count', 'ymax'], index=genes)
+
+print(gene_annot_df)
 
 ##### target rule #####
 rule all:

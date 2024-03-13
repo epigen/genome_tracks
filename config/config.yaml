@@ -18,8 +18,9 @@ genome_size: 2407883318
 # mm10: 2407883318
 
 ##### TRACK ANNOTATION #####
-# gene list text file (.txt) where each line is either a gene name (e.g., Tmem26) or a genomic region (e.g., chr4:88521700-88524300)
-gene_list: /path/to/gene_list.txt
+# comma separated table (CSV) where each line is either a gene name (e.g., Tmem26) or a genomic region (e.g., chr4:88521700-88524300)
+# columns: gene_region, ymax (y-axis scale of tracks, if 'auto' it uses auto-scale for each track)
+gene_list: /path/to/genes.csv
 
 # 12 column BED file annotation of the respective genome used for the annotation of the track (*.gz)
 # e.g., for mm10 from UCSC as gzip https://genome.ucsc.edu/cgi-bin/hgTables assembly:mm10 -> track:NCBI RefSeq -> table:refFlat; output format: BED
@@ -27,8 +28,6 @@ genome_bed: /path/to/genome_bedfile/mm10_UCSC_genome.bed.gz
 
 
 ##### VISUALIZATION using gtracks #####
-# y-axis scale of tracks, if '' it uses auto-scale for each track
-y_max: 100
 # position of x-axis
 x_axis: 'bottom'
 #  width of plot in cm (default: 40)
