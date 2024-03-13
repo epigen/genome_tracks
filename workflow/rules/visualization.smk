@@ -1,5 +1,5 @@
 
-# plot genome tracks of groups in the same category together using pygenometracks wrapper gtracks
+# plot genome tracks of groups in the same category together using pyGenomeTracks wrapper gtracks
 rule plot_tracks:
     input:
         get_bigwigs,
@@ -24,7 +24,7 @@ rule plot_tracks:
         # gtracks parameters
         gene = lambda w: "{}".format(w.gene),
         genome_bed = config['genome_bed'],
-        ymax = lambda w: "--max {}".format(gene_annot_df.loc["{}".format(w.gene), "ymax"]) if gene_annot_df.loc["{}".format(w.gene),"ymax"] is not None else " ",
+        ymax = lambda w: "--max {}".format(gene_annot_df.loc["{}".format(w.gene), "ymax"]) if gene_annot_df.loc["{}".format(w.gene),"ymax"]!=0 else " ",
         xaxis = xaxis,
         coordinates = lambda w: "{}:{}-{}".format(gene_annot_df.loc[w.gene,'chr'], gene_annot_df.loc[w.gene,'start'], gene_annot_df.loc[w.gene,'end']),
         # eg chr14:103052047-103053094

@@ -45,14 +45,14 @@ gene_annot_list = []
 remove_genes = []
 for gene in genes:
     if COORD_REGEX.match(gene):
-        gene_annot_list.append(parse_region(gene))
+        gene_annot_list.append((parse_region(gene) + (gene_dict[gene]["ymax"],)))
     else:
         tmp_val = parse_gene(gene)
         if tmp_val==-1:
             # drop gene, because not found
             remove_genes.append(gene)
         else:
-            gene_annot_list.append(tmp_val)
+            gene_annot_list.append((tmp_val + (gene_dict[gene]["ymax"],)))
 
 # save text file containing genes that were not found in the provided genome BED file
 if len(remove_genes)>0:

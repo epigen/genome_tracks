@@ -26,7 +26,7 @@ def parse_gene(gene):
                         end = tmp_end
         if count==0:
             return -1
-    return chrom, int(start)-base_buffer, int(end)+base_buffer, count, gene_dict[gene]["ymax"]
+    return chrom, int(start)-base_buffer, int(end)+base_buffer, count
 
 def parse_region(region):
     chrom, start, end = region.replace('-', ':').split(':')

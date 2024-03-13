@@ -19,7 +19,7 @@ genome_size: 2407883318
 
 ##### TRACK ANNOTATION #####
 # comma separated table (CSV) where each line is either a gene name (e.g., Tmem26) or a genomic region (e.g., chr4:88521700-88524300)
-# columns: gene_region, ymax (y-axis scale of tracks, if 'auto' it uses auto-scale for each track)
+# columns: gene_region, ymax (y-axis scale of tracks, if 0 auto-scale is used)
 gene_list: /path/to/genes.csv
 
 # 12 column BED file annotation of the respective genome used for the annotation of the track (*.gz)
