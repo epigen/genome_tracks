@@ -2,11 +2,11 @@
 def get_bams(wildcards):
     return annot.loc[annot['group']==wildcards.group,'bam'].to_list()
 
-def get_bigwigs(wildcards):
+def get_bigWigs(wildcards):
     if wildcards.category=='ALL':
-        return expand(os.path.join(config["result_path"], module_name, 'bigwigs','{group}.bw'),group=sorted(annot['group'].unique()))
+        return expand(os.path.join(result_path, 'bigWigs','{group}.bw'),group=sorted(annot['group'].unique()))
     else:
-        return expand(os.path.join(config["result_path"], module_name, 'bigwigs','{group}.bw'),group=sorted(annot.loc[annot['category']==wildcards.category,'group'].unique()))
+        return expand(os.path.join(result_path, 'bigWigs','{group}.bw'),group=sorted(annot.loc[annot['category']==wildcards.category,'group'].unique()))
 
 def parse_gene(gene):
     count = 0
@@ -26,7 +26,7 @@ def parse_gene(gene):
                         end = tmp_end
         if count==0:
             return -1
-    return chrom, int(start)-base_buffer, int(end)+base_buffer, count
+    return chrom, int(start)-config['base_buffer'], int(end)+config['base_buffer'], count
 
 def parse_region(region):
     chrom, start, end = region.replace('-', ':').split(':')

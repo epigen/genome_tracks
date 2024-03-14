@@ -3,7 +3,7 @@ rule merge_bams:
     input:
         get_bams,
     output:
-        merged_bam = os.path.join(config["result_path"], module_name, 'merged_bams','{group}.bam'),
+        merged_bam = os.path.join(result_path, 'merged_bams','{group}.bam'),
     resources:
         mem_mb = config.get("mem", "4000"),
     threads: config.get("threads", 1)
@@ -23,22 +23,22 @@ rule merge_bams:
         """
     
 # generate a bigWig file per group using bamCoverage
-rule make_bigwigs:
+rule make_bigWigs:
     input:
-        merged_bam = os.path.join(config["result_path"], module_name, 'merged_bams','{group}.bam'),
+        merged_bam = os.path.join(result_path, 'merged_bams','{group}.bam'),
     output:
-        bigwig = os.path.join(config["result_path"], module_name, 'bigwigs','{group}.bw'),
+        bigWig = os.path.join(result_path, 'bigWigs','{group}.bw'),
     resources:
         mem_mb=config.get("mem", "4000"),
     threads: config.get("threads", 1)
     conda:
         "../envs/pygenometracks.yaml",
     log:
-        os.path.join("logs","rules","make_bigwigs_{group}.log"),
+        os.path.join("logs","rules","make_bigWigs_{group}.log"),
     params:
         # bamCoverage parameters
         extendReads =  lambda w: "--extendReads 175" if "ATAC" in "{}".format(w.group) else " ",
-        genome_size = genome_size,
+        genome_size = config["genome_size"],
         # cluster parameters
         partition = config.get("partition"),
     shell:
@@ -46,5 +46,5 @@ rule make_bigwigs:
         bamCoverage --bam {input.merged_bam} \
             -p max --binSize 10  --normalizeUsing RPGC \
             --effectiveGenomeSize {params.genome_size} {params.extendReads} \
-            -o "{output.bigwig}" > "{output.bigwig}.log" 2>&1;
+            -o "{output.bigWig}" > "{output.bigWig}.log" 2>&1;
         """

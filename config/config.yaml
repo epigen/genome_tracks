@@ -10,8 +10,12 @@ threads: 1
 project_name: myData
 result_path: /path/to/project/driectory/
 sample_annotation: /path/to/myData_genome_tracks_annotation.csv
+email: sreichl@cemm.at # used for UCSC hub generation
 
 ##### bigWigs #####
+# provide genome label for UCSC hub (hg38, mm10)
+genome: "mm10"
+
 # provide the genome size for bigWig generation using bamCoverage
 genome_size: 2407883318
 # hg38: 2747877777
