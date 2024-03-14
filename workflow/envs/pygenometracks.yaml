@@ -6,8 +6,8 @@ channels:
 dependencies:
   - samtools
   - deeptools
-  - pygenometracks=3.6
-  - python=3.7
+  - pygenometracks=3.8
+  - python
   - pip
   - pip:
-    - gtracks==1.8.1
+    - gtracks==1.12.6

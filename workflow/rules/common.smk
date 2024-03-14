@@ -31,3 +31,18 @@ def parse_gene(gene):
 def parse_region(region):
     chrom, start, end = region.replace('-', ':').split(':')
     return chrom, int(start), int(end), 1
+
+def get_colors(wildcards, input):
+    if wildcards.category=='ALL':
+        # extract group information and order from inputs
+        groups = [os.path.basename(path).replace('.bw', '') for path in input]
+        # map groups to categories
+        annot_reduced = annot[['group', 'category']].drop_duplicates()
+        categories = annot_reduced[annot_reduced['group'].isin(groups)]['category'].tolist()
+        # map categories to colors & make color parameter string
+        colors = [config["track_colors"][category] for category in categories if category in config["track_colors"]]
+        colors_str = "' '".join(colors)
+        colors_str = "'"+colors_str+"'"
+        return colors_str #("'#000000'")# * len(inputs)
+    else:
+        return ("'"+config["track_colors"][wildcards.category]+"' ") * len(input)

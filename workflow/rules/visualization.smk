@@ -95,9 +95,9 @@ rule plot_tracks:
         ymax = lambda w: "--max {}".format(gene_annot_df.loc["{}".format(w.gene), "ymax"]) if gene_annot_df.loc["{}".format(w.gene),"ymax"]!=0 else " ",
         xaxis = config['x_axis'],
         coordinates = lambda w: "{}:{}-{}".format(gene_annot_df.loc[w.gene,'chr'], gene_annot_df.loc[w.gene,'start'], gene_annot_df.loc[w.gene,'end']),
-        # eg chr14:103052047-103053094
         gene_rows = lambda w: "{}".format(gene_annot_df.loc[w.gene,'count'].astype(np.int64)),
         width = "{}".format(config['width']),
+        colors = get_colors,
         # cluster parameters
         partition = config.get("partition"),
     shell:
@@ -107,9 +107,11 @@ rule plot_tracks:
         gtracks {params.coordinates} \
             {input} \
             {output.genome_track} \
-            --genes {params.genome_bed} {params.ymax} \
+            --genes {params.genome_bed} \
+            {params.ymax} \
             --gene-rows {params.gene_rows} \
             --genes-height {params.gene_rows} \
             --x-axis {params.xaxis} \
-            --width {params.width}
+            --width {params.width} \
+            --color-palette {params.colors}
         """

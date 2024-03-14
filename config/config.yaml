@@ -12,14 +12,16 @@ result_path: /path/to/project/driectory/
 sample_annotation: /path/to/myData_genome_tracks_annotation.csv
 email: sreichl@cemm.at # used for UCSC hub generation
 
-##### bigWigs #####
-# provide genome label for UCSC hub (hg38, mm10)
+##### PROCESSING #####
+# genome label for UCSC hub (hg38, mm10)
 genome: "mm10"
 
-# provide the genome size for bigWig generation using bamCoverage
-genome_size: 2407883318
-# hg38: 2747877777
-# mm10: 2407883318
+# bigWig generation using deepTools::bamCoverage
+# https://deeptools.readthedocs.io/en/develop/content/tools/bamCoverage.html
+# recommendation for RNA-seq: "-p max --binSize 10  --normalizeUsing RPGC --effectiveGenomeSize 2407883318"
+# recommendation for ATAC-seq: "-p max --binSize 10  --normalizeUsing RPGC --effectiveGenomeSize 2407883318 --extendReads 175 "
+# genome sizes (https://deeptools.readthedocs.io/en/latest/content/feature/effectiveGenomeSize.html): hg38=2747877777, mm10=2407883318 
+bamCoverage_parameters: "-p max --binSize 10  --normalizeUsing RPGC --effectiveGenomeSize 2407883318"
 
 ##### TRACK ANNOTATION #####
 # comma separated table (CSV) where each line is either a gene name (e.g., Tmem26) or a genomic region (e.g., chr4:88521700-88524300)
@@ -30,13 +32,21 @@ gene_list: /path/to/genes.csv
 # e.g., for mm10 from UCSC as gzip https://genome.ucsc.edu/cgi-bin/hgTables assembly:mm10 -> track:NCBI RefSeq -> table:refFlat; output format: BED
 genome_bed: /path/to/genome_bedfile/mm10_UCSC_genome.bed.gz
 
+##### VISUALIZATION using gtracks powered by pyGenomeTracks #####
 
-##### VISUALIZATION using gtracks #####
 # position of x-axis
 x_axis: 'bottom'
+
 #  width of plot in cm (default: 40)
 width: 20
+
 # how many bases up- & downstream of start/end of a gene more to plot (e.g., to see accessible promoters)
 base_buffer: 2000
+
 # file type of the plot, options are "svg","pdf","png"
 file_type: "pdf"
+
+# define custom colors (in HEX) for categories from the annotation file
+track_colors:
+    untreated: "#800080"
+    treated: "#008000"
