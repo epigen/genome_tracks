@@ -43,6 +43,7 @@ def get_colors(wildcards, input):
         colors = [config["track_colors"][category] for category in categories if category in config["track_colors"]]
         colors_str = "' '".join(colors)
         colors_str = "'"+colors_str+"'"
-        return colors_str #("'#000000'")# * len(inputs)
+        return colors_str
     else:
         return ("'"+config["track_colors"][wildcards.category]+"' ") * len(input)
+

@@ -23,13 +23,13 @@ genes = list(gene_dict.keys())
 
 result_path = os.path.join(config["result_path"], module_name)
 
+COORD_REGEX = re.compile('chr[0-9XY]+:[0-9]+-[0-9]+$')
+
 ##### load rules #####
 include: os.path.join("rules", "common.smk")
 include: os.path.join("rules", "envs_export.smk")
 include: os.path.join("rules", "prepare.smk")
 include: os.path.join("rules", "visualization.smk")
-
-COORD_REGEX = re.compile('chr[0-9XY]+:[0-9]+-[0-9]+$')
 
 # find gtrack parameters for each gene and handle exception when gene is not found
 gene_annot_list = []
@@ -55,6 +55,8 @@ if len(remove_genes)>0:
 genes = [gene.replace(':', '-') for gene in genes]
 gene_annot_df = pd.DataFrame(gene_annot_list, columns=['chr', 'start', 'end', 'count', 'ymax'], index=genes)
 
+# print(gene_annot_df)
+
 ##### target rule #####
 rule all:
     input:
@@ -63,8 +65,10 @@ rule all:
         genome_tracks_all = expand(os.path.join(result_path, 'tracks', 'ALL_{gene}.'+config["file_type"]), gene=genes),
         # UCSC genome browser track hub
         trackdb_file = os.path.join(result_path, "bigWigs", config["genome"], "trackDb.txt"),
+        # IGV-report
+        igv_report = os.path.join(result_path, "igv-report.html"),
         # environments and configs
-        envs = expand(os.path.join(config["result_path"],'envs', module_name,'{env}.yaml'),env=['pygenometracks']),
+        envs = expand(os.path.join(config["result_path"],'envs', module_name,'{env}.yaml'),env=['pygenometracks','igv_reports']),
         gene_list = os.path.join(config["result_path"],'configs', module_name,'gene_list.txt'),
         configs = os.path.join(config["result_path"],'configs', module_name,'{}_config.yaml'.format(config["project_name"])),
         annotations = os.path.join(config["result_path"],'configs', module_name,'{}_annot.csv'.format(config["project_name"])),

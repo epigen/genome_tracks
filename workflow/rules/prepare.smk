@@ -1,3 +1,21 @@
+# create BED file of genes/genomic regions
+rule make_bed:
+    output:
+        bed_file = os.path.join(result_path,'genes.bed'),
+    resources:
+        mem_mb = config.get("mem", "1000"),
+    threads: config.get("threads", 1)
+    log:
+        os.path.join("logs","rules","make_bed.log"),
+    params:
+        # cluster parameters
+        partition = config.get("partition"),
+    run:
+        # Convert DataFrame to .BED format (chr, start, end, name)
+        bed_df = gene_annot_df.reset_index().rename(columns={'index': 'name'})
+        bed_df = bed_df[['chr', 'start', 'end', 'name']]
+        bed_df.to_csv(output.bed_file, sep='\t', header=False, index=False)
+
 # merge .bam files of the same group according to annotation using samtools
 rule merge_bams:
     input:

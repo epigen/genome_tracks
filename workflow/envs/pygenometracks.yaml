@@ -4,10 +4,10 @@ channels:
   - bioconda
   - defaults
 dependencies:
-  - samtools
-  - deeptools
+  - samtools=1.19.2
+  - deeptools=3.5.5
   - pygenometracks=3.8
-  - python
-  - pip
+  - python=3.10.13
+  - pip=24.0
   - pip:
     - gtracks==1.12.6

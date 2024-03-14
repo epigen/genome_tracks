@@ -115,3 +115,30 @@ rule plot_tracks:
             --width {params.width} \
             --color-palette {params.colors}
         """
+
+# create interactive IGV-report
+rule igv_report:
+    input:
+        bed = os.path.join(result_path,'genes.bed'),
+        tracks = expand(os.path.join(result_path, 'merged_bams','{group}.bam'), group=sorted(annot['group'].unique())),
+    output:
+        igv_report = os.path.join(result_path, "igv-report.html"),
+    resources:
+        mem_mb = config.get("mem", "4000"),
+    threads: config.get("threads", 1)
+    conda:
+        "../envs/igv_reports.yaml",
+    log:
+        os.path.join("logs","rules","igv_report.log"),
+    params:
+        # igv-reports parameters
+        genome = config["genome"],
+        # cluster parameters
+        partition = config.get("partition"),
+    shell:
+        """
+        create_report {input.bed} \
+            --genome {params.genome} \
+            --tracks {input.tracks} \
+            --output {output.igv_report}
+        """
