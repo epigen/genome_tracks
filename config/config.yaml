@@ -46,7 +46,8 @@ base_buffer: 2000
 # file type of the plot, options are "svg","pdf","png"
 file_type: "pdf"
 
-# define custom colors (in HEX) for categories from the annotation file
+# define custom colors (in HEX) for groups from the annotation file
 track_colors:
     untreated: "#800080"
-    treated: "#008000"
+    LO28_2h: "#00FFFF"
+    LO28_6h: "#FF0000"

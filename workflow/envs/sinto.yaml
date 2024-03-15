@@ -1,0 +1,7 @@
+name: sinto
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - sinto=0.10.0

@@ -2,9 +2,9 @@
 # prepare a UCSC genome browser track hub
 rule ucsc_hub:
     input:
-        bigWig_files = expand(os.path.join(result_path, 'bigWigs','{group}.bw'), group=sorted(annot['group'].unique())),
+        bigWig_files = expand(os.path.join(result_path, 'bigWigs','{group}.bw'), group=plot_groups),
     output:
-        bigWig_symlinks = expand(os.path.join(result_path, "bigWigs", config["genome"], "{group}.bw"), group=sorted(annot['group'].unique())),
+        bigWig_symlinks = expand(os.path.join(result_path, "bigWigs", config["genome"], "{group}.bw"), group=plot_groups),
         genomes_file = os.path.join(result_path, "bigWigs", "genomes.txt"),
         hub_file = os.path.join(result_path, "bigWigs", "hub.txt"),
         trackdb_file = os.path.join(result_path, "bigWigs", config["genome"], "trackDb.txt"),
@@ -37,8 +37,8 @@ rule ucsc_hub:
 
         # create trackdb file
         with open(output.trackdb_file, 'w') as tf:
-            colors = ['166,206,227', '31,120,180', '51,160,44', '251,154,153', '227,26,28',
-                              '253,191,111', '255,127,0', '202,178,214', '106,61,154', '177,89,40']
+#             colors = ['166,206,227', '31,120,180', '51,160,44', '251,154,153', '227,26,28',
+#                               '253,191,111', '255,127,0', '202,178,214', '106,61,154', '177,89,40']
             
             track_db = ['track {}'.format(config["project_name"]),
                         'type bigWig', 'compositeTrack on', 'autoScale on', 'maxHeightPixels 32:32:8',
@@ -46,12 +46,14 @@ rule ucsc_hub:
                         'longLabel {}'.format(config["project_name"]),
                         'visibility full',
                         '', '']
-            for group in sorted(annot['group'].unique()):
-                track_color = '255,40,0'
+            for group in plot_groups:
+#                 track_color = '255,40,0'
                 
 #                 if config["annot_columns"][0]!="":
-                color_hash = hash(annot.loc[annot['group']==group,'category'][0]) #hash(samples[sample_name][config["annot_columns"][0]])
-                track_color = colors[color_hash % len(colors)]
+#                 color_hash = hash(annot.loc[annot['group']==group,'category'][0]) #hash(samples[sample_name][config["annot_columns"][0]])
+#                 track_color = colors[color_hash % len(colors)]
+                hex_color = config["track_colors"][group] if group in config["track_colors"] else "#000000"
+                track_color = tuple(int(hex_color[i:i+2], 16) for i in (1, 3, 5)) # convert to RGB
                 
                 track = ['track {}'.format(group),
                          'shortLabel {}'.format(group),
@@ -67,18 +69,18 @@ rule ucsc_hub:
             tf.write('\n'.join(track_db))
 
 
-# plot genome tracks of groups in the same category together using pyGenomeTracks wrapper gtracks
+# plot genome tracks of groups using pyGenomeTracks wrapper gtracks
 rule plot_tracks:
     input:
         get_bigWigs,
     output:
-        genome_track = report(os.path.join(result_path, 'tracks','{category}_{gene}.'+config["file_type"]), 
+        genome_track = report(os.path.join(result_path, 'tracks','{gene}.'+config["file_type"]), 
                               caption="../report/genome_tracks.rst", 
                               category="{}_{}".format(config["project_name"], module_name),
-                              subcategory="{category}",
+                              subcategory="genome tracks",
                               labels={
                                   "data": "{gene}",
-                                  "type": "genome track",
+                                  "type": "pyGenomeTrack",
                                   "misc": "ymax {}".format(lambda w: gene_annot_df.loc["{}".format(w.gene),"ymax"]),
                               }),
     resources:
@@ -87,7 +89,7 @@ rule plot_tracks:
     conda:
         "../envs/pygenometracks.yaml",
     log:
-        os.path.join("logs","rules","plot_tracks_{category}_{gene}.log"),
+        os.path.join("logs","rules","plot_tracks_{gene}.log"),
     params:
         # gtracks parameters
         gene = lambda w: "{}".format(w.gene),
@@ -120,7 +122,7 @@ rule plot_tracks:
 rule igv_report:
     input:
         bed = os.path.join(result_path,'genes.bed'),
-        tracks = expand(os.path.join(result_path, 'merged_bams','{group}.bam'), group=sorted(annot['group'].unique())),
+        tracks = expand(os.path.join(result_path, 'merged_bams','{group}.bam'), group=plot_groups),
     output:
         igv_report = os.path.join(result_path, "igv-report.html"),
     resources:

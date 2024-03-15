@@ -2,11 +2,17 @@
 def get_bams(wildcards):
     return annot.loc[annot['group']==wildcards.group,'bam'].to_list()
 
-def get_bigWigs(wildcards):
-    if wildcards.category=='ALL':
-        return expand(os.path.join(result_path, 'bigWigs','{group}.bw'),group=sorted(annot['group'].unique()))
+def get_prepared_bam(wildcards):
+    if wildcards.group in sc_groups:
+        return os.path.join(result_path, 'sc_bams','{group}.bam')
     else:
-        return expand(os.path.join(result_path, 'bigWigs','{group}.bw'),group=sorted(annot.loc[annot['category']==wildcards.category,'group'].unique()))
+        return os.path.join(result_path, 'merged_bams','{group}.bam')
+
+def get_bigWigs(wildcards):
+#     if wildcards.category=='ALL':
+    return expand(os.path.join(result_path, 'bigWigs','{group}.bw'),group=plot_groups)
+#     else:
+#         return expand(os.path.join(result_path, 'bigWigs','{group}.bw'),group=sorted(annot.loc[annot['category']==wildcards.category,'group'].unique()))
 
 def parse_gene(gene):
     count = 0
@@ -33,17 +39,18 @@ def parse_region(region):
     return chrom, int(start), int(end), 1
 
 def get_colors(wildcards, input):
-    if wildcards.category=='ALL':
-        # extract group information and order from inputs
-        groups = [os.path.basename(path).replace('.bw', '') for path in input]
-        # map groups to categories
-        annot_reduced = annot[['group', 'category']].drop_duplicates()
-        categories = annot_reduced[annot_reduced['group'].isin(groups)]['category'].tolist()
-        # map categories to colors & make color parameter string
-        colors = [config["track_colors"][category] for category in categories if category in config["track_colors"]]
-        colors_str = "' '".join(colors)
-        colors_str = "'"+colors_str+"'"
-        return colors_str
-    else:
-        return ("'"+config["track_colors"][wildcards.category]+"' ") * len(input)
+#     if wildcards.category=='ALL':
+    # extract group information and order from inputs
+    groups = [os.path.basename(path).replace('.bw', '') for path in input]
+    # map groups to categories
+#     annot_reduced = annot[['group', 'category']].drop_duplicates()
+#     categories = annot_reduced[annot_reduced['group'].isin(groups)]['category'].tolist()
+    # map categories to colors & make color parameter string
+#     colors = [config["track_colors"][group] for group in groups if group in config["track_colors"] else "#000000"]
+    colors = [config["track_colors"][group] if group in config["track_colors"] else "#000000" for group in groups]
+    colors_str = "' '".join(colors)
+    colors_str = "'"+colors_str+"'"
+    return colors_str
+#     else:
+#         return ("'"+config["track_colors"][wildcards.category]+"' ") * len(input)
 

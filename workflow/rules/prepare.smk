@@ -39,11 +39,33 @@ rule merge_bams:
         
         samtools index -@ {threads} -b {output.merged_bam}
         """
+
+# create single cell .bam files using sinto
+rule sc_bams:
+    input:
+        merged_bam = os.path.join(result_path, 'merged_bams','{group}.bam'),
+    output:
+        sc_bam = expand(os.path.join(result_path, 'sc_bams','{group}.bam'), group=lambda w: sc_file_group_dict[w.group]),
+    resources:
+        mem_mb = config.get("mem", "4000"),
+    threads: 4*config.get("threads", 1)
+    conda:
+        "../envs/sinto.yaml",
+    log:
+        os.path.join("logs","rules","sc_bams_{group}.log"),
+    params:
+        # cluster parameters
+        partition = config.get("partition"),
+    shell:
+        """
+        sinto filterbarcodes -b {input.bam} -c {input.metadata} --outdir {output} -p {threads}
+        """
     
 # generate a bigWig file per group using bamCoverage
 rule coverage:
     input:
-        bam = os.path.join(result_path, 'merged_bams','{group}.bam'),
+        get_prepared_bam,
+#         bam = os.path.join(result_path, 'merged_bams','{group}.bam'),
     output:
         bigWig = os.path.join(result_path, 'bigWigs','{group}.bw'),
     resources:
