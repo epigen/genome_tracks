@@ -6,6 +6,7 @@ import re # for regular expressions
 import numpy as np
 import json
 from snakemake.utils import min_version
+import hashlib # generating unique sample names for single-cell samples
 
 min_version("7.15.2")
 
@@ -21,22 +22,20 @@ annot = pd.read_csv(config['sample_annotation'])
 gene_dict = pd.read_csv(config['gene_list'], index_col="gene_region").to_dict('index')
 genes = list(gene_dict.keys())
 
-# groups for bam file merging
-merge_groups = sorted(annot['group'].unique())
-
 # extracts unique grouping values from the 2nd column of the single cell metadata TSV files listed in 'group' column of annotation file
 sc_file_group_dict = {}
-for f in annot['group']:
-    if f.endswith('.tsv'):
-        sc_file_group_dict[f] = pd.read_csv(f, header=None, sep='\t')[1].unique().tolist()
-sc_groups = list(set(value for sublist in sc_file_group_dict.values() for value in sublist))
+
+for index, row in annot.iterrows():
+    if row['group'].endswith('.tsv'):
+        # generate hash of the BAM file path as dictionary key
+        bam_hash = hashlib.md5(row['bam'].encode()).hexdigest()
+        sc_file_group_dict[bam_hash] = {"bam":row["bam"], "metadata":row['group'], "groups": pd.read_csv(row['group'], header=None, sep='\t')[1].unique().tolist()}
+
+sc_groups = list(set(group for data in sc_file_group_dict.values() for group in data['groups']))
+# sc_sample_groups = [f"{key}__{group}" for key, value in sc_file_group_dict.items() for group in value['groups']]
 
 # groups for actual visualization
-plot_groups = list(set(sc_groups + [f for f in annot['group'] if not f.endswith('.tsv')]))
-
-print(merge_groups)
-print(sc_groups)
-print(plot_groups)
+plot_groups = sc_groups + list(set([group for group in annot['group'] if not group.endswith('.tsv')]))
 
 result_path = os.path.join(config["result_path"], module_name)
 
@@ -77,9 +76,6 @@ gene_annot_df = pd.DataFrame(gene_annot_list, columns=['chr', 'start', 'end', 'c
 ##### target rule #####
 rule all:
     input:
-        # preparation
-        merged_bams = expand(os.path.join(result_path, 'merged_bams','{group}.bam'), group=merge_groups),
-        sc_bams = expand(os.path.join(result_path, 'sc_bams','{group}.bam'), group=sc_groups),
         # genome tracks
         genome_tracks = expand(os.path.join(result_path, 'tracks', '{gene}.'+config["file_type"]), gene=genes),
 #         genome_tracks_all = expand(os.path.join(result_path, 'tracks', 'ALL_{gene}.'+config["file_type"]), gene=genes),

@@ -1,12 +1,38 @@
 ##### utility functions #####
-def get_bams(wildcards):
-    return annot.loc[annot['group']==wildcards.group,'bam'].to_list()
 
-def get_prepared_bam(wildcards):
+def get_sc_bam(wildcards):
+#     sample, group = wildcards.sample_group.split('__')
+#     return [sc_file_group_dict[sample]["bam"], sc_file_group_dict[sample]["metadata"]]
+    return [sc_file_group_dict[wildcards.sample]["bam"], sc_file_group_dict[wildcards.sample]["metadata"]]
+
+# def aggregate_group_bams(wildcards):
+#     checkpoint_output = checkpoints.split_sc_bam.get(**wildcards).output[0]
+#     # Assuming the output directory contains the split BAM files named '{group}.bam'
+#     bam_files = glob.glob(os.path.join(checkpoint_output, f"{wildcards.group}.bam"))
+#     print(bam_files)
+#     return bam_files
+    
+
+def get_bams(wildcards):
     if wildcards.group in sc_groups:
-        return os.path.join(result_path, 'sc_bams','{group}.bam')
+        samples = [key for key, value in sc_file_group_dict.items() if wildcards.group in value['groups']]
+        return expand(os.path.join(result_path, 'sc_bams', "{sample}", "{}.bam".format(wildcards.group)), sample=samples)
+#         return [os.path.join(result_path, 'sc_bams', sample, "{}.bam".format(wildcards.group)) for sample in samples]
+        
+#         # find all samples with wildcards.group in ["groups"] and generate BAM file list sc_bams/{key}__{group}
+#         checkpoint_output = checkpoints.split_sc_bam.get(**wildcards).output[0]
+#         # Assuming the output directory contains the split BAM files named '{group}.bam'
+#         bam_files = glob.glob(os.path.join(checkpoint_output, wildcards.sample, f"{wildcards.group}.bam"))
+#         print(bam_files)
+#         return bam_files
     else:
-        return os.path.join(result_path, 'merged_bams','{group}.bam')
+        return annot.loc[annot['group']==wildcards.group,'bam'].to_list()
+
+# def get_merged_bam(wildcards):
+#     if wildcards.group in sc_groups:
+#         return os.path.join(result_path, 'sc_bams','{group}.bam')
+#     else:
+#         return os.path.join(result_path, 'merged_bams','{group}.bam')
 
 def get_bigWigs(wildcards):
 #     if wildcards.category=='ALL':

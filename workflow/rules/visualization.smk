@@ -143,4 +143,8 @@ rule igv_report:
             --genome {params.genome} \
             --tracks {input.tracks} \
             --output {output.igv_report}
+            
+            
+        # replace 'Variants' with 'Genes and genomic regions of interest' in the HTML
+        sed 's/<label for="collapsible" class="lbl-toggle">Variants<\/label>/<label for="collapsible" class="lbl-toggle">Genes and genomic regions of interest<\/label>/g' {output.igv_report} > {output.igv_report}.tmp && mv {output.igv_report}.tmp {output.igv_report}
         """
