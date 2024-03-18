@@ -29,7 +29,7 @@ rule config_export:
                          subcategory="{}_{}".format(config["project_name"], module_name)
                         )
     resources:
-        mem_mb = 1000, #config.get("mem", "1000"),
+        mem_mb = 1000,
     threads: config.get("threads", 1)
     log:
         os.path.join("logs","rules","config_export.log"),
@@ -50,7 +50,7 @@ rule annot_export:
                          subcategory="{}_{}".format(config["project_name"], module_name)
                         )
     resources:
-        mem_mb = 1000, #config.get("mem_small", "16000"),
+        mem_mb = 1000,
     threads: config.get("threads", 1)
     log:
         os.path.join("logs","rules","annot_export.log"),
@@ -66,13 +66,13 @@ rule gene_list_export:
     input:
         config["gene_list"],
     output:
-        gene_list = report(os.path.join(config["result_path"],'configs', module_name,'gene_list.txt'), 
+        gene_list = report(os.path.join(config["result_path"],'configs', module_name,'gene_list.csv'), 
                             caption="../report/gene_list.rst", 
                             category="Configuration", 
                             subcategory="{}_{}".format(config["project_name"], module_name)
                            ),
     resources:
-        mem_mb = 1000, #config.get("mem_small", "16000"),config.get("mem", "16000"),
+        mem_mb = 1000,
     threads: config.get("threads", 1)
     log:
         os.path.join("logs","rules","gene_list_export.log"),

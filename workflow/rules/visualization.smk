@@ -37,8 +37,6 @@ rule ucsc_hub:
 
         # create trackdb file
         with open(output.trackdb_file, 'w') as tf:
-#             colors = ['166,206,227', '31,120,180', '51,160,44', '251,154,153', '227,26,28',
-#                               '253,191,111', '255,127,0', '202,178,214', '106,61,154', '177,89,40']
             
             track_db = ['track {}'.format(config["project_name"]),
                         'type bigWig', 'compositeTrack on', 'autoScale on', 'maxHeightPixels 32:32:8',
@@ -47,11 +45,7 @@ rule ucsc_hub:
                         'visibility full',
                         '', '']
             for group in plot_groups:
-#                 track_color = '255,40,0'
                 
-#                 if config["annot_columns"][0]!="":
-#                 color_hash = hash(annot.loc[annot['group']==group,'category'][0]) #hash(samples[sample_name][config["annot_columns"][0]])
-#                 track_color = colors[color_hash % len(colors)]
                 hex_color = config["track_colors"][group] if group in config["track_colors"] else "#000000"
                 track_color = tuple(int(hex_color[i:i+2], 16) for i in (1, 3, 5)) # convert to RGB
                 
@@ -124,7 +118,15 @@ rule igv_report:
         bed = os.path.join(result_path,'genes.bed'),
         tracks = expand(os.path.join(result_path, 'merged_bams','{group}.bam'), group=plot_groups),
     output:
-        igv_report = os.path.join(result_path, "igv-report.html"),
+        igv_report = report(os.path.join(result_path, "igv-report.html"), 
+                              caption="../report/igv_report.rst", 
+                              category="{}_{}".format(config["project_name"], module_name),
+                              subcategory="IGV report",
+                              labels={
+                                  "data": "IGV report",
+                                  "type": "HTML",
+                                  "misc": "interactive",
+                              }),
     resources:
         mem_mb = config.get("mem", "4000"),
     threads: config.get("threads", 1)
@@ -146,5 +148,5 @@ rule igv_report:
             
             
         # replace 'Variants' with 'Genes and genomic regions of interest' in the HTML
-        sed 's/<label for="collapsible" class="lbl-toggle">Variants<\/label>/<label for="collapsible" class="lbl-toggle">Genes and genomic regions of interest<\/label>/g' {output.igv_report} > {output.igv_report}.tmp && mv {output.igv_report}.tmp {output.igv_report}
+        sed 's/<label for="collapsible" class="lbl-toggle">Variants<\/label>/<label for="collapsible" class="lbl-toggle">Genes and genomic regions<\/label>/g' {output.igv_report} > {output.igv_report}.tmp && mv {output.igv_report}.tmp {output.igv_report}
         """

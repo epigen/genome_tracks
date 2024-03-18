@@ -32,7 +32,6 @@ for index, row in annot.iterrows():
         sc_file_group_dict[bam_hash] = {"bam":row["bam"], "metadata":row['group'], "groups": pd.read_csv(row['group'], header=None, sep='\t')[1].unique().tolist()}
 
 sc_groups = list(set(group for data in sc_file_group_dict.values() for group in data['groups']))
-# sc_sample_groups = [f"{key}__{group}" for key, value in sc_file_group_dict.items() for group in value['groups']]
 
 # groups for actual visualization
 plot_groups = sc_groups + list(set([group for group in annot['group'] if not group.endswith('.tsv')]))
@@ -71,21 +70,18 @@ if len(remove_genes)>0:
 genes = [gene.replace(':', '-') for gene in genes]
 gene_annot_df = pd.DataFrame(gene_annot_list, columns=['chr', 'start', 'end', 'count', 'ymax'], index=genes)
 
-# print(gene_annot_df)
-
 ##### target rule #####
 rule all:
     input:
         # genome tracks
         genome_tracks = expand(os.path.join(result_path, 'tracks', '{gene}.'+config["file_type"]), gene=genes),
-#         genome_tracks_all = expand(os.path.join(result_path, 'tracks', 'ALL_{gene}.'+config["file_type"]), gene=genes),
         # UCSC genome browser track hub
         trackdb_file = os.path.join(result_path, "bigWigs", config["genome"], "trackDb.txt"),
         # IGV-report
         igv_report = os.path.join(result_path, "igv-report.html"),
         # environments and configs
-        envs = expand(os.path.join(config["result_path"],'envs', module_name,'{env}.yaml'),env=['pygenometracks','igv_reports']),
-        gene_list = os.path.join(config["result_path"],'configs', module_name,'gene_list.txt'),
+        envs = expand(os.path.join(config["result_path"],'envs', module_name,'{env}.yaml'),env=['pygenometracks','igv_reports','sinto']),
+        gene_list = os.path.join(config["result_path"],'configs', module_name,'gene_list.csv'),
         configs = os.path.join(config["result_path"],'configs', module_name,'{}_config.yaml'.format(config["project_name"])),
         annotations = os.path.join(config["result_path"],'configs', module_name,'{}_annot.csv'.format(config["project_name"])),
     params:
