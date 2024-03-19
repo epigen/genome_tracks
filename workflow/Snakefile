@@ -35,6 +35,7 @@ sc_groups = list(set(group for data in sc_file_group_dict.values() for group in 
 
 # groups for actual visualization
 plot_groups = sc_groups + list(set([group for group in annot['group'] if not group.endswith('.tsv')]))
+plot_groups.sort()
 
 result_path = os.path.join(config["result_path"], module_name)
 

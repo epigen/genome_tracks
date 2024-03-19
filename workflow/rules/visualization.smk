@@ -52,10 +52,10 @@ rule ucsc_hub:
                 track = ['track {}'.format(group),
                          'shortLabel {}'.format(group),
                          'longLabel {}'.format(group),
-                         'bigDataUrl {}.bigWig'.format(group),
+                         'bigDataUrl {}.bw'.format(group),
                          'parent {} on'.format(config["project_name"]),
                          'type bigWig', 'windowingFunction mean',
-                         'color {}'.format(track_color),
+                         'color {}'.format(','.join(map(str, track_color))),
                          '', '']
                 
                 track_db += track
@@ -66,7 +66,8 @@ rule ucsc_hub:
 # plot genome tracks of groups using pyGenomeTracks wrapper gtracks
 rule plot_tracks:
     input:
-        get_bigWigs,
+        bigWigs = expand(os.path.join(result_path, 'bigWigs','{group}.bw'), group=plot_groups),
+#         get_bigWigs,
     output:
         genome_track = report(os.path.join(result_path, 'tracks','{gene}.'+config["file_type"]), 
                               caption="../report/genome_tracks.rst", 
@@ -101,7 +102,7 @@ rule plot_tracks:
         export GTRACKS_GENES_PATH={params.genome_bed}
         
         gtracks {params.coordinates} \
-            {input} \
+            {input.bigWigs} \
             {output.genome_track} \
             --genes {params.genome_bed} \
             {params.ymax} \

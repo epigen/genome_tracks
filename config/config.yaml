@@ -1,4 +1,3 @@
-# always use absolute paths
 
 ##### RESOURCES #####
 # memory (mem) in MB
@@ -49,5 +48,4 @@ file_type: "pdf"
 # define custom colors (in HEX) for groups from the annotation file
 track_colors:
     untreated: "#800080"
-    LO28_2h: "#00FFFF"
-    LO28_6h: "#FF0000"
+    treated: "#00FFFF"

@@ -1,5 +1,7 @@
 # create BED file of genes/genomic regions
 rule make_bed:
+    input:
+        config["gene_list"],
     output:
         bed_file = os.path.join(result_path,'genes.bed'),
     resources:
