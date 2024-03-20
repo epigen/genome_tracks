@@ -1,0 +1,32 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: Genome Browser Track Visualization Workflow
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - affiliation: CeMM Research Center for Molecular Medicine
+    given-names: Stephan
+    family-names: Reichl
+    orcid: 'https://orcid.org/0000-0001-8555-7198'
+  - given-names: Christoph
+    family-names: Bock
+    orcid: 'https://orcid.org/0000-0001-6091-3088'
+    affiliation: CeMM Research Center for Molecular Medicine
+repository-code: 'https://github.com/epigen/genome_tracks'
+url: 'https://epigen.github.io/genome_tracks'
+abstract: >-
+  A Snakemake workflow for easy visualization of genome
+  browser tracks of aligned BAM files (e.g., RNA-seq,
+  ATAC-seq, scRNA-seq, ...) powered by the wrapper gtracks
+  for the package pyGenomeTracks, and IGV-reports.
+keywords:
+  - Bioinformatics
+  - Genome tracks
+  - Visualization
+  - Workflow
+  - Snakemake
+license: MIT
