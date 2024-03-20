@@ -114,6 +114,7 @@ rule plot_tracks:
         """
 
 # create interactive IGV-report
+# https://github.com/igvteam/igv-reports
 rule igv_report:
     input:
         bed = os.path.join(result_path,'genes.bed'),

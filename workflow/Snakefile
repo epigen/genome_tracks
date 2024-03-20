@@ -63,9 +63,9 @@ for gene in genes:
 
 # save text file containing genes that were not found in the provided genome BED file
 if len(remove_genes)>0:
-    if not os.path.exists(os.path.join(config["result_path"],'genome_tracks')):
-        os.makedirs(os.path.join(config["result_path"],'genome_tracks'))
-    pd.DataFrame(remove_genes).to_csv(os.path.join(config["result_path"],'genome_tracks','genes_not_found.csv'), index=False, header=False)
+    if not os.path.exists(result_path):
+        os.makedirs(result_path)
+    pd.DataFrame(remove_genes).to_csv(os.path.join(result_path,'genes_not_found.csv'), index=False, header=False)
     genes = [gene for gene in genes if gene not in remove_genes]
 
 genes = [gene.replace(':', '-') for gene in genes]

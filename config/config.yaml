@@ -12,10 +12,10 @@ sample_annotation: /path/to/myData_genome_tracks_annotation.csv
 email: sreichl@cemm.at # used for UCSC hub generation
 
 ##### PROCESSING #####
-# genome label for UCSC hub (hg38, mm10)
+# genome label for UCSC hub (hg38, mm10) and IGV-report
 genome: "mm10"
 
-# bigWig generation using deepTools::bamCoverage
+# bigWig coverage generation using deepTools::bamCoverage
 # https://deeptools.readthedocs.io/en/develop/content/tools/bamCoverage.html
 # recommendation for RNA-seq: "-p max --binSize 10  --normalizeUsing RPGC --effectiveGenomeSize 2407883318"
 # recommendation for ATAC-seq: "-p max --binSize 10  --normalizeUsing RPGC --effectiveGenomeSize 2407883318 --extendReads 175 "
@@ -24,7 +24,7 @@ bamCoverage_parameters: "-p max --binSize 10  --normalizeUsing RPGC --effectiveG
 
 ##### TRACK ANNOTATION #####
 # comma separated table (CSV) where each line is either a gene name (e.g., Tmem26) or a genomic region (e.g., chr4:88521700-88524300)
-# columns: gene_region, ymax (y-axis scale of tracks, if 0 auto-scale is used)
+# columns: gene_region, ymax (y-axis scale of plotted tracks, if 0 auto-scale is used)
 gene_list: /path/to/genes.csv
 
 # 12 column BED file annotation of the respective genome used for the annotation of the track (*.gz)
