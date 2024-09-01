@@ -100,6 +100,9 @@ The `bigWigs` directory contains the read coverage per sample/group in bigWig fo
     - hg38 example: [http://genome-euro.ucsc.edu/cgi-bin/hgTracks?db=hg38&hubUrl=https://medical-epigenomics.org/data/genome_tracks/hg38test/hub/hub.txt](http://genome-euro.ucsc.edu/cgi-bin/hgTracks?db=hg38&hubUrl=https://medical-epigenomics.org/data/genome_tracks/hg38test/hub/hub.txt)
 3. Share the link with the world e.g., collaborators or upon publication of your data.
 
+**A new feature (2024-08-30)** allows users to download all visible data in the current region directly from our tracks display. This facilitates reproducibility when writing reports or publications as data can update and change over time. This feature can be found in the blue bar menu by going to **Downloads > Download Current Track Data**. The resulting pop-up dialogue box (see screenshot below) can configure the exact tracks to download from all visible tracks, as well as the file name and the output format (JSON, csv, tsv).
+![UCSC_download](https://github.com/user-attachments/assets/174ad904-52a2-458f-a1e7-387a0ff95007)
+
 ## IGV: Integrative Genomics Viewer (local/offline)
 0. Requirement: [IGV Desktop application](https://igv.org/doc/desktop/).
 1. Open IGV.
