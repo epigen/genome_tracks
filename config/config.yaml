@@ -1,7 +1,6 @@
 
 ##### RESOURCES #####
 # memory (mem) in MB
-partition: 'tinyq'
 mem: '4000'
 threads: 1
 

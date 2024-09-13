@@ -8,9 +8,6 @@ rule ucsc_hub:
         genomes_file = os.path.join(result_path, "bigWigs", "genomes.txt"),
         hub_file = os.path.join(result_path, "bigWigs", "hub.txt"),
         trackdb_file = os.path.join(result_path, "bigWigs", config["genome"], "trackDb.txt"),
-    params:
-        # cluster parameters
-        partition=config.get("partition"),
     resources:
         mem_mb=config.get("mem", "1000"),
     threads: config.get("threads", 1)
@@ -95,8 +92,6 @@ rule plot_tracks:
         gene_rows = lambda w: "{}".format(gene_annot_df.loc[w.gene,'count'].astype(np.int64)),
         width = "{}".format(config['width']),
         colors = get_colors,
-        # cluster parameters
-        partition = config.get("partition"),
     shell:
         """
         export GTRACKS_GENES_PATH={params.genome_bed}
@@ -139,8 +134,6 @@ rule igv_report:
     params:
         # igv-reports parameters
         genome = config["genome"],
-        # cluster parameters
-        partition = config.get("partition"),
     shell:
         """
         create_report {input.bed} \

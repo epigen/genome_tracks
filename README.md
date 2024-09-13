@@ -1,7 +1,7 @@
 [![DOI](https://zenodo.org/badge/438573546.svg)](https://zenodo.org/doi/10.5281/zenodo.10849097)
 
 # Genome Browser Track Visualization Workflow 
-A [Snakemake](https://snakemake.readthedocs.io/en/stable/) workflow for easy visualization of genome browser tracks of aligned/mapped BAM files (e.g., RNA-seq, ATAC-seq, scRNA-seq, ...) powered by the wrapper [gtracks](https://gitlab.com/salk-tm/gtracks) for the package [pyGenomeTracks](https://github.com/deeptools/pyGenomeTracks) and [IGV-reports](https://github.com/igvteam/igv-reports).
+A [Snakemake 8](https://snakemake.readthedocs.io/en/stable/) workflow for easy visualization of genome browser tracks of aligned/mapped BAM files (e.g., RNA-seq, ATAC-seq, scRNA-seq, ...) powered by the wrapper [gtracks](https://gitlab.com/salk-tm/gtracks) for the package [pyGenomeTracks](https://github.com/deeptools/pyGenomeTracks) and [IGV-reports](https://github.com/igvteam/igv-reports).
 
 This workflow adheres to the module specifications of [MR.PARETO](https://github.com/epigen/mr.pareto), an effort to augment research by modularizing (biomedical) data science. For more details, instructions and modules check out the project's repository. Please consider starring and sharing modules that are interesting or useful to you, this helps me in prioritizing my efforts!
 

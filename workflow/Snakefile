@@ -1,3 +1,7 @@
+
+##### global workflow dependencies #####
+conda: "envs/global.yaml"
+
 # libraries
 import pandas as pd
 import os
@@ -8,7 +12,8 @@ import json
 from snakemake.utils import min_version
 import hashlib # generating unique sample names for single-cell samples
 
-min_version("7.15.2")
+##### set minimum snakemake version #####
+min_version("8.20.1")
 
 module_name = "genome_tracks"
 
@@ -85,9 +90,6 @@ rule all:
         gene_list = os.path.join(config["result_path"],'configs', module_name,'gene_list.csv'),
         configs = os.path.join(config["result_path"],'configs', module_name,'{}_config.yaml'.format(config["project_name"])),
         annotations = os.path.join(config["result_path"],'configs', module_name,'{}_annot.csv'.format(config["project_name"])),
-    params:
-        # cluster parameters
-        partition = config.get("partition"),
     resources:
         mem_mb=config.get("mem", "4000"),
     threads: config.get("threads", 1)

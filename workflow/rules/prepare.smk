@@ -9,9 +9,6 @@ rule make_bed:
     threads: config.get("threads", 1)
     log:
         os.path.join("logs","rules","make_bed.log"),
-    params:
-        # cluster parameters
-        partition = config.get("partition"),
     run:
         # Convert DataFrame to .BED format (chr, start, end, name)
         bed_df = gene_annot_df.reset_index().rename(columns={'index': 'name'})
@@ -32,9 +29,6 @@ rule split_sc_bam:
         "../envs/sinto.yaml",
     log:
         os.path.join("logs","rules","split_sc_bam_{sample}.log"),
-    params:
-        # cluster parameters
-        partition = config.get("partition"),
     shell:
         """
         sinto filterbarcodes -b {input[0]} -c {input[1]} --outdir $(dirname {output[0]}) -p {threads}
@@ -61,9 +55,6 @@ rule merge_bams:
         "../envs/pygenometracks.yaml",
     log:
         os.path.join("logs","rules","merge_bams_{group}.log"),
-    params:
-        # cluster parameters
-        partition = config.get("partition"),
     shell:
         """
         samtools merge -@ {threads} {output.merged_bam} {input}
@@ -86,10 +77,7 @@ rule coverage:
     log:
         os.path.join("logs","rules","coverage_{group}.log"),
     params:
-        # bamCoverage parameters
         bamCoverage_parameters = config["bamCoverage_parameters"],
-        # cluster parameters
-        partition = config.get("partition"),
     shell:
         """
         bamCoverage --bam {input.bam} \
