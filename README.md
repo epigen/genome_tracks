@@ -1,33 +1,29 @@
+[![MR.PARETO](https://img.shields.io/badge/MR.PARETO-red)](https://github.com/epigen/mr.pareto/)
 [![DOI](https://zenodo.org/badge/438573546.svg)](https://zenodo.org/doi/10.5281/zenodo.10849097)
+[![](https://tokei.rs/b1/github/epigen/genome_tracks?category=code)]() 
+[![](https://tokei.rs/b1/github/epigen/genome_tracks?category=files)]()
+[![GitHub license](https://img.shields.io/github/license/epigen/genome_tracks)](https://github.com/epigen/genome_tracks/blob/master/LICENSE)
+![GitHub Release](https://img.shields.io/github/v/release/epigen/genome_tracks)
+[![Snakemake](https://img.shields.io/badge/Snakemake->=8.20.1-green)](https://snakemake.readthedocs.io/en/stable/)
 
 # Genome Browser Track Visualization Workflow 
 A [Snakemake 8](https://snakemake.readthedocs.io/en/stable/) workflow for easy visualization of genome browser tracks of aligned/mapped BAM files (e.g., RNA-seq, ATAC-seq, scRNA-seq, ...) powered by the wrapper [gtracks](https://gitlab.com/salk-tm/gtracks) for the package [pyGenomeTracks](https://github.com/deeptools/pyGenomeTracks) and [IGV-reports](https://github.com/igvteam/igv-reports).
 
-This workflow adheres to the module specifications of [MR.PARETO](https://github.com/epigen/mr.pareto), an effort to augment research by modularizing (biomedical) data science. For more details, instructions and modules check out the project's repository. Please consider starring and sharing modules that are interesting or useful to you, this helps me in prioritizing my efforts!
+> [!NOTE]  
+> This workflow adheres to the module specifications of [MR.PARETO](https://github.com/epigen/mr.pareto), an effort to augment research by modularizing (biomedical) data science. For more details, instructions, and modules check out the project's repository.
+>
+> ⭐️ **Star and share modules you find valuable** 📤 - help others discover them, and guide our focus for future work!
 
-**If you use this workflow in a publication, please don't forget to give credits to the authors by citing this DOI [10.5281/zenodo.10849097](https://zenodo.org/doi/10.5281/zenodo.10849097).**
+> [!IMPORTANT]  
+> **If you use this workflow in a publication, please don't forget to give credit to the authors by citing it using this DOI [10.5281/zenodo.10849097](https://zenodo.org/doi/10.5281/zenodo.10849097).**
 
 ![Workflow Rulegraph](./workflow/dags/rulegraph.svg)
 
-Table of contents
-----------------
-  * [Authors](#authors)
-  * [Software](#software)
-  * [Methods](#methods)
-  * [Features](#features)
-  * [Usage](#usage)
-  * [Configuration](#configuration)
-  * [Examples](#examples)
-  * [Links](#links)
-  * [Genome Browser Tracks](#genome-browser-tracks)
-  * [Resources](#resources)
-  * [Publications](#publications)
-
-# Authors
+# 🖋️ Authors
 - [Stephan Reichl](https://github.com/sreichl)
 - [Christoph Bock](https://github.com/chrbock)
 
-# Software
+# 💿 Software
 This project wouldn't be possible without the following software and their dependencies:
 
 | Software | Reference (DOI) |
@@ -39,8 +35,8 @@ This project wouldn't be possible without the following software and their depen
 | samtools | https://doi.org/10.1093/bioinformatics/btp352 |
 | sinto | https://github.com/timoast/sinto |
 
-# Methods
-This is a template for the Methods section of a scientific publication and is intended to serve as a starting point. Only retain paragraphs relevant to your analysis. References [ref] to the respective publications are curated in the software table above. Versions (ver) have to be read out from the respective conda environment specifications (workflow/envs/\*.yaml file) or post execution in the result directory (/envs/genome_tracks/\*.yaml). Parameters that have to be adapted depending on the data or workflow configurations are denoted in squared brackets e.g., [X].
+# 🔬 Methods
+This is a template for the Methods section of a scientific publication and is intended to serve as a starting point. Only retain paragraphs relevant to your analysis. References [ref] to the respective publications are curated in the software table above. Versions (ver) have to be read out from the respective conda environment specifications (`workflow/envs/*.yaml file`) or post-execution in the result directory (`genome_tracks/envs/*.yaml`). Parameters that have to be adapted depending on the data or workflow configurations are denoted in squared brackets e.g., [X].
 
 __(optional) Single-cell preprocessing.__ Each single-cell BAM file was split into [group]-wise BAM files according to it's cell barcode metadata using filterbarcodes from the command line tool sinto (ver) [ref].
 
@@ -50,7 +46,7 @@ __Visualization.__ Visualizations for each relevant gene/genomic region and [cat
 
 **The processing and visualizations described here were performed using a publicly available Snakemake [ver] (ref) workflow [[10.5281/zenodo.10849097](https://zenodo.org/doi/10.5281/zenodo.10849097)].**
 
-# Features
+# 🚀 Features
 The workflow performs the following steps to produce the outlined results (`genome_tracks/`).
 
 - Processing
@@ -67,7 +63,7 @@ The workflow performs the following steps to produce the outlined results (`geno
   - An interactive self-contained IGV-report from merged BAM files with all genes/regions is generated for inspection for sharing (`igv-report.html`).
   - A UCSC genome browser track hub for all bigWigs is set up (`bigWigs/`), color coded according to configuration. See detailed instructions for usage and sharing below.
 
-# Usage
+# 🛠️ Usage
 Here are some tips for the usage of this workflow:
 - Start with the 1-5 most interesting genes (e.g., marker genes for cell types as quality control or the most differentially expressed between conditions) and few/relevant samples for a test run.
 - Set y-max to auto (i.e., 0 in the `gene_list` CSV table) for the first run to get a feeling for the magnitudes in your samples/groups and adapt to the highest peaks afterward to make the tracks comparable within a gene/region of interest.
@@ -76,10 +72,10 @@ Here are some tips for the usage of this workflow:
 
 This workflow is written with Snakemake and its usage is described in the [Snakemake Workflow Catalog](https://snakemake.github.io/snakemake-workflow-catalog?usage=epigen/genome_tracks).
 
-# Configuration
+# ⚙️ Configuration
 Detailed specifications can be found here [./config/README.md](./config/README.md)
 
-# Examples
+# 📖 Examples
 --- COMING SOON ---
 
 Runtime examples for different data modalities:
@@ -87,7 +83,7 @@ Runtime examples for different data modalities:
 - 64 RNA-seq samples in 31 groups took 16 minutes with max 4 cores and 4GB memory.
 - 2 10x genomics 5' scRNA-seq samples/reactions each ~10k cells split in 2 small subset groups took 31 minutes with max 4 cores and 8GB memory.
 
-# Genome Browser Tracks
+# 🧬 Genome Browser Tracks
 The `bigWigs` directory contains the read coverage per sample/group in bigWig format (`{group}.bw`) for visual inspection of each sample e.g., during QC or group e.g., comparison of conditions. Below are instructions for two different approaches (online/local).
 
 ## UCSC Genome Browser Track Hub (online)
@@ -109,20 +105,24 @@ The `bigWigs` directory contains the read coverage per sample/group in bigWig fo
 2. Select genome.
 3. Drag and drop all/selected bigWig files from the `bigWigs` directory directly into the IGV application.
 
-# Links
+# 🔗 Links
 - [GitHub Repository](https://github.com/epigen/genome_tracks/)
 - [GitHub Page](https://epigen.github.io/genome_tracks/)
 - [Zenodo Repository](https://zenodo.org/doi/10.5281/zenodo.10849097)
 - [Snakemake Workflow Catalog Entry](https://snakemake.github.io/snakemake-workflow-catalog?usage=epigen/genome_tracks)
 
-# Resources
-- Recommended compatible [MR.PARETO](https://github.com/epigen/mr.pareto) modules:
-  - for upstream processing (before)
+# 📚 Resources
+- Recommended compatible [MR.PARETO](https://github.com/epigen/mr.pareto) modules for upstream processing:
     - [ATAC-seq Data Processing & Quantification Pipeline](https://github.com/epigen/atacseq_pipeline) for processing, quantification and annotation of ATAC-seq samples.
 - [UCSC Genome Browser annotation track database](https://genome.ucsc.edu/cgi-bin/hgTables)
     - recommended source for the required 12 column BED file annotation of the respective genome.
     - e.g., for mm10 from UCSC as gzip https://genome.ucsc.edu/cgi-bin/hgTables assembly:mm10 -> track:NCBI RefSeq -> table:refFlat; output format: BED
 
-# Publications
+# 📑 Publications
 The following publications successfully used this module for their analyses.
+- [FirstAuthors et al. (202X) Journal Name - Paper Title.](https://doi.org/10.XXX/XXXX)
 - ...
+
+# ⭐ Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=epigen/genome_tracks&type=Date)](https://star-history.com/#epigen/genome_tracks&Date)
