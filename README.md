@@ -12,7 +12,7 @@ A [Snakemake 8](https://snakemake.readthedocs.io/en/stable/) workflow for easy v
 > [!NOTE]  
 > This workflow adheres to the module specifications of [MR.PARETO](https://github.com/epigen/mr.pareto), an effort to augment research by modularizing (biomedical) data science. For more details, instructions, and modules check out the project's repository.
 >
-> ⭐️ **Star and share modules you find valuable** 📤 - help others discover them, and guide our focus for future work!
+> ⭐️ **Star and share modules you find valuable** 📤 - help others discover them, and guide our future work!
 
 > [!IMPORTANT]  
 > **If you use this workflow in a publication, please don't forget to give credit to the authors by citing it using this DOI [10.5281/zenodo.10849097](https://zenodo.org/doi/10.5281/zenodo.10849097).**
