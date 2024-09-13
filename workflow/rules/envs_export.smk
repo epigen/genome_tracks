@@ -1,7 +1,7 @@
 # rule for used conda environments to document the exact versions and builds of the used software        
 rule env_export:
     output:
-        report(os.path.join(config["result_path"],'envs', module_name,'{env}.yaml'),
+        report(os.path.join(result_path,'envs','{env}.yaml'),
                       caption="../report/software.rst", 
                       category="Software", 
                       subcategory="{}_{}".format(config["project_name"], module_name)
@@ -21,7 +21,7 @@ rule env_export:
 # add configuration files to report        
 rule config_export:
     output:
-        configs = report(os.path.join(config["result_path"],'configs', module_name,'{}_config.yaml'.format(config["project_name"])), 
+        configs = report(os.path.join(result_path,'configs','{}_config.yaml'.format(config["project_name"])), 
                          caption="../report/configs.rst", 
                          category="Configuration", 
                          subcategory="{}_{}".format(config["project_name"], module_name)
@@ -40,7 +40,7 @@ rule annot_export:
     input:
         config["sample_annotation"],
     output:
-        annot = report(os.path.join(config["result_path"],'configs', module_name,'{}_annot.csv'.format(config["project_name"])), 
+        annot = report(os.path.join(result_path,'configs','{}_annot.csv'.format(config["project_name"])), 
                          caption="../report/configs.rst", 
                          category="Configuration", 
                          subcategory="{}_{}".format(config["project_name"], module_name)
@@ -60,7 +60,7 @@ rule gene_list_export:
     input:
         config["gene_list"],
     output:
-        gene_list = report(os.path.join(config["result_path"],'configs', module_name,'gene_list.csv'), 
+        gene_list = report(os.path.join(result_path,'configs','gene_list.csv'), 
                             caption="../report/gene_list.rst", 
                             category="Configuration", 
                             subcategory="{}_{}".format(config["project_name"], module_name)
