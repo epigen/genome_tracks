@@ -1,4 +1,4 @@
-[![MR.PARETO](https://img.shields.io/badge/MR.PARETO-red)](https://github.com/epigen/mr.pareto/)
+[![MrBiomics](https://img.shields.io/badge/MrBiomics-red)](https://github.com/epigen/MrBiomics/)
 [![DOI](https://zenodo.org/badge/438573546.svg)](https://zenodo.org/doi/10.5281/zenodo.10849097)
 [![](https://tokei.rs/b1/github/epigen/genome_tracks?category=code)]() 
 [![](https://tokei.rs/b1/github/epigen/genome_tracks?category=files)]()
@@ -10,7 +10,7 @@
 A [Snakemake 8](https://snakemake.readthedocs.io/en/stable/) workflow for easy visualization of genome browser tracks of aligned/mapped BAM files (e.g., RNA-seq, ATAC-seq, scRNA-seq, ...) powered by the wrapper [gtracks](https://gitlab.com/salk-tm/gtracks) for the package [pyGenomeTracks](https://github.com/deeptools/pyGenomeTracks) and [IGV-reports](https://github.com/igvteam/igv-reports).
 
 > [!NOTE]  
-> This workflow adheres to the module specifications of [MR.PARETO](https://github.com/epigen/mr.pareto), an effort to augment research by modularizing (biomedical) data science. For more details, instructions, and modules check out the project's repository.
+> This workflow adheres to the module specifications of [MrBiomics](https://github.com/epigen/MrBiomics), an effort to augment research by modularizing (biomedical) data science. For more details, instructions, and modules check out the project's repository.
 >
 > ⭐️ **Star and share modules you find valuable** 📤 - help others discover them, and guide our future work!
 
@@ -112,7 +112,7 @@ The `bigWigs` directory contains the read coverage per sample/group in bigWig fo
 - [Snakemake Workflow Catalog Entry](https://snakemake.github.io/snakemake-workflow-catalog?usage=epigen/genome_tracks)
 
 # 📚 Resources
-- Recommended compatible [MR.PARETO](https://github.com/epigen/mr.pareto) modules for upstream processing:
+- Recommended compatible [MrBiomics](https://github.com/epigen/MrBiomics) modules for upstream processing:
     - [ATAC-seq Data Processing & Quantification Pipeline](https://github.com/epigen/atacseq_pipeline) for processing, quantification and annotation of ATAC-seq samples.
 - [UCSC Genome Browser annotation track database](https://genome.ucsc.edu/cgi-bin/hgTables)
     - recommended source for the required 12 column BED file annotation of the respective genome.
