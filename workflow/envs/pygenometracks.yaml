@@ -2,7 +2,7 @@ name: pygenometracks
 channels:
   - conda-forge
   - bioconda
-  - defaults
+  - nodefaults
 dependencies:
   - samtools=1.19.2
   - deeptools=3.5.5
