@@ -83,8 +83,8 @@ rule all:
         genome_tracks = expand(os.path.join(result_path, 'tracks', '{gene}.'+config["file_type"]), gene=genes),
         # UCSC genome browser track hub
         trackdb_file = os.path.join(result_path, "bigWigs", config["genome"], "trackDb.txt"),
-        # IGV-report
-        igv_report = os.path.join(result_path, "igv-report.html"),
+        # IGV-report (temporarily deactivated)
+        # igv_report = os.path.join(result_path, "igv-report.html"),
         # environments and configs
         envs = expand(os.path.join(result_path,'envs','{env}.yaml'),env=['pygenometracks','igv_reports','sinto']),
         gene_list = os.path.join(result_path,'configs','gene_list.csv'),

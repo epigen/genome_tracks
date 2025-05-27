@@ -64,6 +64,7 @@ rule ucsc_hub:
 rule plot_tracks:
     input:
         bigWigs = expand(os.path.join(result_path, 'bigWigs','{group}.bw'), group=plot_groups),
+        genome_bed = config['genome_bed'],
 #         get_bigWigs,
     output:
         genome_track = report(os.path.join(result_path, 'tracks','{gene}.'+config["file_type"]), 
@@ -85,7 +86,6 @@ rule plot_tracks:
     params:
         # gtracks parameters
         gene = lambda w: "{}".format(w.gene),
-        genome_bed = config['genome_bed'],
         ymax = lambda w: "--max {}".format(gene_annot_df.loc["{}".format(w.gene), "ymax"]) if gene_annot_df.loc["{}".format(w.gene),"ymax"]!=0 else " ",
         xaxis = config['x_axis'],
         coordinates = lambda w: "{}:{}-{}".format(gene_annot_df.loc[w.gene,'chr'], gene_annot_df.loc[w.gene,'start'], gene_annot_df.loc[w.gene,'end']),
@@ -94,12 +94,12 @@ rule plot_tracks:
         colors = get_colors,
     shell:
         """
-        export GTRACKS_GENES_PATH={params.genome_bed}
+        export GTRACKS_GENES_PATH={input.genome_bed}
         
         gtracks {params.coordinates} \
             {input.bigWigs} \
             {output.genome_track} \
-            --genes {params.genome_bed} \
+            --genes {input.genome_bed} \
             {params.ymax} \
             --gene-rows {params.gene_rows} \
             --genes-height {params.gene_rows} \
@@ -125,7 +125,7 @@ rule igv_report:
                                   "misc": "interactive",
                               }),
     resources:
-        mem_mb = config.get("mem", "4000"),
+        mem_mb = lambda wc, input: max(2 * input.size_mb, 8000)
     threads: config.get("threads", 1)
     conda:
         "../envs/igv_reports.yaml",
