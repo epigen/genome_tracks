@@ -47,3 +47,10 @@ def get_colors(wildcards, input):
     
     return colors_str
 
+def get_track_label(wildcards):
+    return {
+        "data": "{}".format(wildcards.gene),
+        "type": "pyGenomeTrack",
+        "misc": "ymax {}".format(gene_annot_df.loc["{}".format(wildcards.gene),"ymax"]),
+        }
+

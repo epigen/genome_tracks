@@ -71,11 +71,8 @@ rule plot_tracks:
                               caption="../report/genome_tracks.rst", 
                               category="{}_{}".format(config["project_name"], module_name),
                               subcategory="genome tracks",
-                              labels={
-                                  "data": "{gene}",
-                                  "type": "pyGenomeTrack",
-                                  "misc": "ymax {}".format(lambda w: gene_annot_df.loc["{}".format(w.gene),"ymax"]),
-                              }),
+                              labels= get_track_label,
+                             ),
     resources:
         mem_mb=config.get("mem", "4000"),
     threads: config.get("threads", 1)
