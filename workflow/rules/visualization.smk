@@ -105,7 +105,7 @@ rule plot_tracks:
             --color-palette {params.colors}
         """
 
-# create interactive IGV-report
+# create interactive IGV-report (temporarily deactivated)
 # https://github.com/igvteam/igv-reports
 rule igv_report:
     input:
@@ -140,5 +140,5 @@ rule igv_report:
             
             
         # replace 'Variants' with 'Genes and genomic regions of interest' in the HTML
-        sed 's/<label for="collapsible" class="lbl-toggle">Variants<\/label>/<label for="collapsible" class="lbl-toggle">Genes and genomic regions<\/label>/g' {output.igv_report} > {output.igv_report}.tmp && mv {output.igv_report}.tmp {output.igv_report}
+        sed 's/<label for="collapsible" class="lbl-toggle">Variants<\\/label>/<label for="collapsible" class="lbl-toggle">Genes and genomic regions<\\/label>/g' {output.igv_report} > {output.igv_report}.tmp && mv {output.igv_report}.tmp {output.igv_report}
         """
