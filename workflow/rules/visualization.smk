@@ -65,7 +65,7 @@ rule plot_tracks:
     input:
         bigWigs = expand(os.path.join(result_path, 'bigWigs','{group}.bw'), group=plot_groups),
         genome_bed = config['genome_bed'],
-#         get_bigWigs,
+        gene_list = config['gene_list'],
     output:
         genome_track = report(os.path.join(result_path, 'tracks','{gene}.'+config["file_type"]), 
                               caption="../report/genome_tracks.rst", 

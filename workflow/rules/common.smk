@@ -10,9 +10,6 @@ def get_bams(wildcards):
     else:
         return annot.loc[annot['group']==wildcards.group,'bam'].to_list()
 
-# def get_bigWigs(wildcards):
-#     return expand(os.path.join(result_path, 'bigWigs','{group}.bw'),group=sort(plot_groups))
-
 def parse_gene(gene):
     count = 0
     
