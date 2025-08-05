@@ -124,7 +124,7 @@ The `bigWigs` directory contains the read coverage per sample/group in bigWig fo
 
 # 📑 Publications
 The following publications successfully used this module for their analyses.
-- [FirstAuthors et al. (202X) Journal Name - Paper Title.](https://doi.org/10.XXX/XXXX)
+- [Traxler, Reichl et al. (2025) Cell Systems - Integrated time-series analysis and high-content CRISPR screening delineate the dynamics of macrophage immune regulation](https://doi.org/10.1016/j.cels.2025.101346)
 - ...
 
 # ⭐ Star History
